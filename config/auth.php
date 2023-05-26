@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Defaults
+    | AuthenticationData Defaults
     |--------------------------------------------------------------------------
     |
     | This option controls the default authentication "guard" and password
@@ -20,7 +20,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Guards
+    | AuthenticationData Guards
     |--------------------------------------------------------------------------
     |
     | Next, you may define every authentication guard for your application.
