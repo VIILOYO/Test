@@ -15,7 +15,9 @@ class Department extends Model
     use HasFactory;
 
     protected $table = 'departments';
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+    ];
 
     /**
      * @return HasMany

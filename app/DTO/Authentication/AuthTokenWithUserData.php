@@ -3,7 +3,6 @@ namespace App\DTO\Authentication;
 
 use App\Models\User;
 use Atwinta\DTO\DTO;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthTokenWithUserData extends DTO
 {

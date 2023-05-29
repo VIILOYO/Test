@@ -14,7 +14,7 @@ Route::group(['controller' => AuthenticationController::class, 'prefix' => '/aut
     Route::post('/registration', 'registration')->middleware('guest');
     Route::post('/login', 'login')->middleware('guest');
     Route::post('/restore', 'restore')->middleware('auth:sanctum');
-    Route::post('/restore/confirm', 'restrorePassword')->name('restore-confirmed');
+    Route::post('/restore/confirm', 'restorePassword')->name('restore-confirmed');
 });
 
 Route::group(['controller' => WorkController::class, 'middleware' => 'auth:sanctum'], function () {

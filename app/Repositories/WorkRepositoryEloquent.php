@@ -11,7 +11,10 @@ use Prettus\Repository\Eloquent\BaseRepository;
 
 class WorkRepositoryEloquent extends BaseRepository implements WorkRepositoryInterface
 {
-    public function model()
+    /**
+     * @return string
+     */
+    public function model(): string
     {
         return Department::class;
     }

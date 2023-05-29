@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\Authentication\AuthenticationData;
+use App\DTO\Authentication\AuthTokenWithUserData;
 use App\DTO\Authentication\LoginData;
 use App\DTO\Authentication\RestorePasswordData;
 use App\Exceptions\LoginException;
@@ -11,6 +12,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\AuthenticationRepositoryInterface;
 use App\Services\Interfaces\AuthenticationServiceInterface;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthenticationService implements AuthenticationServiceInterface
 {
@@ -24,7 +26,7 @@ class AuthenticationService implements AuthenticationServiceInterface
      */
     public function registrationUser(AuthenticationData $data): User
     {
-        $data->password = Hash::make($data->name);
+        $data->password = Str::random(30);
 
         $user = $this->authenticationRepository->create([
             'name' => $data->name,
@@ -38,6 +40,20 @@ class AuthenticationService implements AuthenticationServiceInterface
         ]);
 
         return $this->authenticationRepository->findWhere(['email' => $user->email])->first();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tokenResponse(User $user): AuthTokenWithUserData
+    {
+        $token = $user->createToken($user->name);
+
+        return AuthTokenWithUserData::create([
+            'token' => $token->plainTextToken,
+            'user' => $user,
+            'password' => $user->getAuthPassword(),
+        ]);
     }
 
     /**
@@ -63,6 +79,7 @@ class AuthenticationService implements AuthenticationServiceInterface
         if (!$user) {
             throw new NotFoundTokenException();
         }
+
         return $user;
     }
 

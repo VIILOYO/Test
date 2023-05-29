@@ -10,9 +10,6 @@ parameters:
         - message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:update\\(\\).$#"
           count: 1
           path: app/Repositories/WorkRepositoryEloquent.php
-        - message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsTo\\:\\:first\\(\\).$#"
-          count: 1
-          path: app/Services/WorkService.php
         - message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:paginate\\(\\).$#"
           count: 1
           path: app/Services/WorkService.php

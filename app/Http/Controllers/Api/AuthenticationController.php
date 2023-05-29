@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\DTO\Authentication\AuthenticationData;
-use App\DTO\Authentication\AuthTokenWithUserData;
 use App\DTO\Authentication\LoginData;
 use App\DTO\Authentication\RestorePasswordData;
 use App\Http\Controllers\Controller;
@@ -12,9 +11,11 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\RestoreConfirmRequest;
 use App\Http\Requests\RestoreRequest;
 use App\Http\Resources\AuthTokenWithUserResource;
+use App\Mail\ResetPassword;
+use App\Models\User;
 use App\Services\Interfaces\AuthenticationServiceInterface;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AuthenticationController extends Controller
 {
@@ -33,13 +34,7 @@ class AuthenticationController extends Controller
 
         $user = $this->authenticationService->registrationUser($data);
 
-        $token = $user->createToken($user->name);
-
-        $user_dto = AuthTokenWithUserData::create([
-            'token' => $token->plainTextToken,
-            'user' => $user,
-            'password' => $user->getAuthPassword(),
-        ]);
+        $user_dto = $this->authenticationService->tokenResponse($user);
 
         return AuthTokenWithUserResource::make($user_dto);
     }
@@ -56,13 +51,7 @@ class AuthenticationController extends Controller
 
         Auth::login($user);
 
-        $token = $user->createToken($user->name);
-
-        $user_dto = AuthTokenWithUserData::create([
-            'token' => $token->plainTextToken,
-            'user' => $user,
-            'password' => $user->getAuthPassword(),
-        ]);
+        $user_dto = $this->authenticationService->tokenResponse($user);
 
         return AuthTokenWithUserResource::make($user_dto);
     }
@@ -73,19 +62,22 @@ class AuthenticationController extends Controller
      */
     public function restore(RestoreRequest $request): void
     {
-        // Mail::to($user->email)->send(new Feedback());
+        /** @var User $user */
+        $user = Auth::user();
+
+        Mail::to($user->email)->send(new ResetPassword());
     }
 
     /**
      * @param RestoreConfirmRequest $request
      * @return void
      */
-    public function restrorePassword(RestoreConfirmRequest $request): void
+    public function restorePassword(RestoreConfirmRequest $request): void
     {
         $data = RestorePasswordData::create($request);
 
         $user = $this->authenticationService->findUserByToken($data);
 
-        //$this->authenticationService->ressetPassword($user, $data);
+        $this->authenticationService->restorePassword($user, $data);
     }
 }

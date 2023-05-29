@@ -6,6 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     /**
      * @return string[]
      */
@@ -21,10 +26,5 @@ class UpdateUserRequest extends FormRequest
             'phone' => 'required',
             'birthday' => 'required',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

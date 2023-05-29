@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\DTO\User\UpdateUserData;
+use App\Enums\RoleEnum;
 use App\Exceptions\PermissionException;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\DepartmentWithWorkersResource;
 use App\Http\Resources\UserCardResource;
-use App\Http\Resources\WorkersWithPagginationResource;
 use App\Models\Department;
 use App\Models\User;
 use App\Repositories\Interfaces\WorkRepositoryInterface;
@@ -15,7 +15,6 @@ use App\Services\Interfaces\WorkServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Expr\Throw_;
 
 class WorkService implements WorkServiceInterface
 {
@@ -40,11 +39,11 @@ class WorkService implements WorkServiceInterface
         /** @var User $user */
         $user = Auth::user();
 
-        if ($user->role == 'worker') {
-            /** @var Department $departments */
-            $departments = $user->getDepartment()->first();
-            return UserCardResource::collection($departments->users()->paginate());
-        } else if ($user->role == 'admin') {
+        if ($user->role == RoleEnum::WORKER) {
+            /** @var Department $department */
+            $department = $user->getDepartment()->first();
+            return UserCardResource::collection($department->users()->paginate());
+        } else if ($user->role == RoleEnum::ADMIN) {
             $departments = $this->workRepository->all();
             return DepartmentWithWorkersResource::collection($departments);
         }
@@ -61,7 +60,7 @@ class WorkService implements WorkServiceInterface
 
         $user = $this->workRepository->findUser($id);
 
-        if ($authUser->role == 'admin' || ($authUser->getDepartment()->get() == $user->getDepartment()->get())) {
+        if ($authUser->role == RoleEnum::ADMIN || ($authUser->getDepartment() === $user->getDepartment())) {
             return $user;
         }
 

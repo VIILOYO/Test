@@ -16,7 +16,10 @@ class WorkPosition extends Model
 
     protected $table = 'work_positions';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'department_id',
+    ];
 
     public function users(): HasMany
     {

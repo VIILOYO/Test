@@ -4,7 +4,6 @@ namespace App\DTO\User;
 
 use Atwinta\DTO\DTO;
 
-
 class UpdateUserData extends DTO
 {
     /**

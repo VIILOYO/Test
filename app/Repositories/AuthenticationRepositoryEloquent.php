@@ -9,7 +9,10 @@ use Prettus\Repository\Eloquent\BaseRepository;
 
 class AuthenticationRepositoryEloquent extends BaseRepository implements AuthenticationRepositoryInterface
 {
-    public function model()
+    /**
+     * @return string
+     */
+    public function model(): string
     {
         return User::class;
     }

@@ -3,6 +3,7 @@
 namespace App\Services\Interfaces;
 
 use App\DTO\Authentication\AuthenticationData;
+use App\DTO\Authentication\AuthTokenWithUserData;
 use App\DTO\Authentication\LoginData;
 use App\DTO\Authentication\RestorePasswordData;
 use App\Exceptions\LoginException;
@@ -16,6 +17,12 @@ interface AuthenticationServiceInterface
      * @return User
      */
     public function registrationUser(AuthenticationData $data): User;
+
+    /**
+     * @param User $user
+     * @return AuthTokenWithUserData
+     */
+    public function tokenResponse(User $user): AuthTokenWithUserData;
 
     /**
      * @param LoginData $data
