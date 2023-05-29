@@ -4,6 +4,9 @@ namespace App\Services\Interfaces;
 
 use App\DTO\Authentication\AuthenticationData;
 use App\DTO\Authentication\LoginData;
+use App\DTO\Authentication\RestorePasswordData;
+use App\Exceptions\LoginException;
+use App\Exceptions\NotFoundTokenException;
 use App\Models\User;
 
 interface AuthenticationServiceInterface
@@ -16,7 +19,22 @@ interface AuthenticationServiceInterface
 
     /**
      * @param LoginData $data
-     * @return User|null
+     * @throws LoginException
+     * @return User
      */
-    public function findUser(LoginData $data): User|null;
+    public function findUserByEmail(LoginData $data): User;
+
+    /**
+     * @param RestorePasswordData $data
+     * @return User
+     *@throws NotFoundTokenException
+     */
+    public function findUserByToken(RestorePasswordData $data): User;
+
+    /**
+     * @param User $user
+     * @param RestorePasswordData $data
+     * @return void
+     */
+    public function restorePassword(User $user, RestorePasswordData $data): void;
 }

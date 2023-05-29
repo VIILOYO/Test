@@ -53,6 +53,8 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof LoginException) {
             return \response(["message" => $e->getMessage()], $e->getCode());
+        } else if ($e instanceof NotFoundTokenException) {
+            return \response(["message" => $e->getMessage()], $e->getCode());
         } else if ($e instanceof ValidationException) {
             $messages = collect($e->errors())->flatten();
             return \response([
