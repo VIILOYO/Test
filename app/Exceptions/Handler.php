@@ -55,6 +55,8 @@ class Handler extends ExceptionHandler
             return \response(["message" => $e->getMessage()], $e->getCode());
         } else if ($e instanceof NotFoundTokenException) {
             return \response(["message" => $e->getMessage()], $e->getCode());
+        } else if ($e instanceof PermissionException) {
+            return \response(["message" => $e->getMessage()], $e->getCode());
         } else if ($e instanceof ValidationException) {
             $messages = collect($e->errors())->flatten();
             return \response([

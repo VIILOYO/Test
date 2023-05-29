@@ -15,15 +15,13 @@ use App\Http\Resources\AuthTokenWithUserResource;
 use App\Services\Interfaces\AuthenticationServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class AuthenticationController extends Controller
 {
     public function __construct(
         public readonly AuthenticationServiceInterface $authenticationService
     )
-    {
-    }
+    {}
 
     /**
      * @param RegisterRequest $request
@@ -32,6 +30,7 @@ class AuthenticationController extends Controller
     public function registration(RegisterRequest $request): AuthTokenWithUserResource
     {
         $data = AuthenticationData::create($request);
+
         $user = $this->authenticationService->registrationUser($data);
 
         $token = $user->createToken($user->name);
@@ -57,20 +56,22 @@ class AuthenticationController extends Controller
 
         Auth::login($user);
 
-        $user->token = $user->createToken($user->name);
+        $token = $user->createToken($user->name);
 
-        return AuthTokenWithUserResource::make($user);
+        $user_dto = AuthTokenWithUserData::create([
+            'token' => $token->plainTextToken,
+            'user' => $user,
+            'password' => $user->getAuthPassword(),
+        ]);
+
+        return AuthTokenWithUserResource::make($user_dto);
     }
 
     /**
      * @param RestoreRequest $request
-     * @return RedirectResponse|void
      */
     public function restore(RestoreRequest $request): RedirectResponse
     {
-        $data = LoginData::create($request);
-        $user = $this->authenticationService->findUserByEmail($data);
-
         // Mail::to($user->email)->send(new Feedback());
     }
 

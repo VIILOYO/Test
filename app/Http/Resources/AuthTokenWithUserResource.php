@@ -17,8 +17,8 @@ class AuthTokenWithUserResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'token' => $this->token->plainTextToken,
-            'user' => AuthenticationResource::make($this),
+            'token' => $this->token,
+            'user' => AuthenticationResource::make($this->user),
             'password' => $this->password,
         ];
     }

@@ -14,15 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user');
-            $table->string('image')->default('default.png');
-            $table->string('about')->nullable();
-            $table->string('type');
-            $table->string('github');
-            $table->string('city');
-            $table->boolean('is_finished')->default(false);
-            $table->string('phone');
-            $table->string('birthday');
+            $table->string('department_id')->after('email')->nullable();
+            $table->string('position_id')->after('department_id')->nullable();
         });
     }
 
@@ -34,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('department_id');
+            $table->dropColumn('position_id');
         });
     }
 };

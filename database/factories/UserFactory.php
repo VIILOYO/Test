@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
+use App\Models\WorkPosition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -15,13 +17,22 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
+            'role' => $this->faker->randomElement(['user', 'worker', 'admin']),
+            'department_id' => Department::get()->random()->id,
+            'position_id' => WorkPosition::get()->random()->id,
+            'about' => $this->faker->word(),
+            'type' => $this->faker->randomElement(['front', 'back']),
+            'github' => $this->faker->word(),
+            'city' => $this->faker->city(),
+            'phone' => $this->faker->phoneNumber(),
+            'birthday' => now(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Str::random(50),
             'remember_token' => Str::random(10),
         ];
     }

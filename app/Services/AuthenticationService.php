@@ -26,7 +26,7 @@ class AuthenticationService implements AuthenticationServiceInterface
     {
         $data->password = Hash::make($data->name);
 
-        return $this->authenticationRepository->create([
+        $user = $this->authenticationRepository->create([
             'name' => $data->name,
             'email' => $data->email,
             'type' => $data->type,
@@ -36,6 +36,8 @@ class AuthenticationService implements AuthenticationServiceInterface
             'phone' => $data->phone,
             'birthday' => $data->birthday,
         ]);
+
+        return $this->authenticationRepository->findWhere(['email' => $user->email])->first();
     }
 
     /**
