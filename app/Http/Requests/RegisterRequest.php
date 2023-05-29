@@ -15,12 +15,11 @@ class RegisterRequest extends FormRequest
     {
         return true;
     }
+
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
+     * @return string[]
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|min:3',

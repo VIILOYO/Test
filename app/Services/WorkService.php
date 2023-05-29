@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\DTO\User\UpdateUserData;
-use App\Exceptions\NotFoundException;
 use App\Exceptions\PermissionException;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\DepartmentWithWorkersResource;
 use App\Http\Resources\UserCardResource;
 use App\Http\Resources\WorkersWithPagginationResource;
+use App\Models\Department;
 use App\Models\User;
 use App\Repositories\Interfaces\WorkRepositoryInterface;
 use App\Services\Interfaces\WorkServiceInterface;
@@ -22,8 +22,7 @@ class WorkService implements WorkServiceInterface
     public function __construct(
         public readonly WorkRepositoryInterface $workRepository
     )
-    {
-    }
+    {}
 
     /**
      * @inheritDoc
@@ -34,20 +33,22 @@ class WorkService implements WorkServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * @return AnonymousResourceCollection
      */
     public function getWorkers(): AnonymousResourceCollection
     {
+        /** @var User $user */
         $user = Auth::user();
 
-        if ($user->role == 'user') {
-            return DepartmentResource::collection($this->getDepartments());
-        } else if ($user->role == 'worker') {
-            return UserCardResource::collection($user->getDepartment()->first()->users()->paginate());
+        if ($user->role == 'worker') {
+            /** @var Department $departments */
+            $departments = $user->getDepartment()->first();
+            return UserCardResource::collection($departments->users()->paginate());
         } else if ($user->role == 'admin') {
             $departments = $this->workRepository->all();
             return DepartmentWithWorkersResource::collection($departments);
         }
+        return DepartmentResource::collection($this->getDepartments());
     }
 
     /**
@@ -55,6 +56,7 @@ class WorkService implements WorkServiceInterface
      */
     public function findUser(int $id): User
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
 
         $user = $this->workRepository->findUser($id);

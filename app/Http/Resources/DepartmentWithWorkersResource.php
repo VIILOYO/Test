@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Department;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -10,7 +11,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class DepartmentWithWorkersResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * @param $request
+     * @return array<string, AnonymousResourceCollection|string>
+     */
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,

@@ -12,7 +12,7 @@ class AuthTokenWithUserResource extends JsonResource
 {
     /**
      * @param $request
-     * @return array
+     * @return array<string, AuthenticationResource>
      */
     public function toArray($request): array
     {

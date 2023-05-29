@@ -10,7 +10,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserWorkerResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * @param $request
+     * @return array<string, WorkerResource>
+     */
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,

@@ -69,18 +69,23 @@ class AuthenticationController extends Controller
 
     /**
      * @param RestoreRequest $request
+     * @return void
      */
-    public function restore(RestoreRequest $request): RedirectResponse
+    public function restore(RestoreRequest $request): void
     {
         // Mail::to($user->email)->send(new Feedback());
     }
 
-    public function restrorePassword(RestoreConfirmRequest $request)
+    /**
+     * @param RestoreConfirmRequest $request
+     * @return void
+     */
+    public function restrorePassword(RestoreConfirmRequest $request): void
     {
         $data = RestorePasswordData::create($request);
 
         $user = $this->authenticationService->findUserByToken($data);
 
-        $this->authenticationService->ressetPassword($user, $data);
+        //$this->authenticationService->ressetPassword($user, $data);
     }
 }

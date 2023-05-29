@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -36,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, bool, string, Carbon>
+     * @var string[]
      */
     protected $fillable = [
         'login',
@@ -54,7 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'birthday',
         'password',
-        'created_at',
     ];
 
     /**
@@ -76,7 +76,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function getDepartment()
+    /**
+     * @return BelongsTo
+     */
+    public function getDepartment(): belongsTo
     {
         return $this->belongsTo(Department::class, 'department_id');
     }

@@ -17,11 +17,9 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
+     * @return string[]
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'email' => 'required|email',

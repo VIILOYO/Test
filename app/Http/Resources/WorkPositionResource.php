@@ -10,7 +10,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class WorkPositionResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * @param $request
+     * @return string[]
+     */
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,

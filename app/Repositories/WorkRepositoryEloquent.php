@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Repositories;
+namespace App\Repositories;
 
 use App\DTO\User\UpdateUserData;
 use App\Models\Department;
@@ -24,7 +24,10 @@ class WorkRepositoryEloquent extends BaseRepository implements WorkRepositoryInt
         return User::findOrfail($id);
     }
 
-    public function userUpdate(UpdateUserData $data)
+    /**
+     * @inheritDoc
+     */
+    public function userUpdate(UpdateUserData $data): void
     {
         Auth::user()->update($data->toArray());
     }
