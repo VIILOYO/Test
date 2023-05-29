@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\DTO\Authentication\AuthenticationData;
 use App\DTO\Authentication\LoginData;
 use App\DTO\Authentication\RestorePasswordData;
+use App\Exceptions\NonVerificatedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -14,6 +15,7 @@ use App\Http\Resources\AuthTokenWithUserResource;
 use App\Mail\ResetPassword;
 use App\Models\User;
 use App\Services\Interfaces\AuthenticationServiceInterface;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -49,6 +51,9 @@ class AuthenticationController extends Controller
 
         $user = $this->authenticationService->findUserByEmail($data);
 
+        if($user->email_verified_at == null) {
+            throw new NonVerificatedException();
+        };
         Auth::login($user);
 
         $user_dto = $this->authenticationService->tokenResponse($user);
@@ -70,14 +75,16 @@ class AuthenticationController extends Controller
 
     /**
      * @param RestoreConfirmRequest $request
-     * @return void
+     * @return response
      */
-    public function restorePassword(RestoreConfirmRequest $request): void
+    public function restorePassword(RestoreConfirmRequest $request): response
     {
         $data = RestorePasswordData::create($request);
 
         $user = $this->authenticationService->findUserByToken($data);
 
         $this->authenticationService->restorePassword($user, $data);
+
+        return response('Вы успешно сменил пароль', 201);
     }
 }

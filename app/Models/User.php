@@ -17,6 +17,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property string $login
  * @property string $name
  * @property string $email
+ * @property Carbon $email_verified_at
  * @property string $image
  * @property string $about
  * @property string $role
@@ -50,6 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'type',
         'github',
         'city',
+        'email_verified_at',
         'is_finished',
         'department_id',
         'position_id',

@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\AuthenticationResource;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\UserWorkerResource;
+use App\Models\User;
 use App\Services\Interfaces\WorkServiceInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
@@ -58,12 +59,16 @@ class WorkController extends Controller
 
     /**
      * @param UpdateUserRequest $request
-     * @return void
+     * @return AuthenticationResource
      */
-    public function editUser(UpdateUserRequest $request): void
+    public function editUser(UpdateUserRequest $request): AuthenticationResource
     {
         $data = UpdateUserData::create($request);
 
         $this->workService->update($data);
+
+        $user = Auth::user();
+
+        return AuthenticationResource::make($user);
     }
 }
